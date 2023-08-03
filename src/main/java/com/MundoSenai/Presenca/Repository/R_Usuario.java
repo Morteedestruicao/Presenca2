@@ -11,3 +11,4 @@ public interface R_Usuario extends JpaRepository<M_Usuario, Long> {
         @Query(value = "SELECT * FROM pessoa WHERE cpf = :usuario and senha = :senha limit 1", nativeQuery = true)
         M_Usuario findByUsuarioESenha(@Param("usuario") Long usuario, @Param("senha") String senha);
 }
+

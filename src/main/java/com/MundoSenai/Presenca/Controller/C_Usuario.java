@@ -34,8 +34,10 @@ public class C_Usuario {
                                @RequestParam("CPF") String CPF,
                                @RequestParam("telefone") String telefone,
                                @RequestParam("senha") String senha,
-                               @RequestParam("data_nasc") String data_nasc,
+                               @RequestParam("data_nasc") String datanasc,
                                @RequestParam("senhaConf") String senhaConf){
+        S_Usuario.cadastrarPessoa(nome, email, CPF, telefone, datanasc, senha, senhaConf);
         return "redirect:/";
     }
+
 }
