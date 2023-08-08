@@ -2,13 +2,13 @@ package com.MundoSenai.Presenca.Controller;
 
 import com.MundoSenai.Presenca.Service.S_Usuario;
 import com.MundoSenai.Presenca.Model.M_Usuario;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
+@SessionAttributes("usuario")
 public class C_Usuario {
     @GetMapping("/")
     public String helloWorld() {
@@ -17,14 +17,29 @@ public class C_Usuario {
 
     @PostMapping("/")
     public String postLogin(@RequestParam("usuario") String usuario,
-                            @RequestParam("senha") String senha) {
-        if (S_Usuario.getPessoaLogin(usuario, senha) == null) {
+                            @RequestParam("senha") String senha, HttpSession session) {
+        session.setAttribute("usuario", S_Usuario.getPessoaLogin(usuario, senha));
+        if (session.getAttribute("usuario") == null) {
             return "Login/login";
         } else {
-            return "templates/Home/home";
+            return "redirect:/home";
         }
     }
 
+    @ModelAttribute("usuario")
+    public M_Usuario getUsuario(HttpSession session) {
+        return (M_Usuario) session.getAttribute("usuario");
+    }
+
+    @GetMapping("/home")
+    public String getHome(@ModelAttribute("usuario") String usuario){
+        if(usuario != null){
+            return "Home/home";
+        }
+        else {
+            return "redirect:/";
+        }
+    }
     @GetMapping("/cadastro")
     public String getCadastro() {
         return "Pessoa/cadastro";
